@@ -1,30 +1,37 @@
 import GalleryItem from './GalleryItem'
 
 function Gallery(props){
+
+    const display = props.data.map((item,index) => {
+        return (
+            <GalleryItem item={item} key={index} />
+        )
+    })
     return (
         <div>
-            <GalleryItem />
+            {display}
         </div>
     )
 }
 
 export default Gallery
 
+// import GalleryItem from "./GalleryItem.js"
 
-
-// import { GalleryItem } from "./GalleryItem"
-// import { useContext } from "react"
-// import { DataContext } from "../context/DataContext"
-
-// export function Gallery({}){
-//     let data = useContext(DataContext)
-//     let songs = data.filter((el) => el.kind === 'song')
+// export function Gallery(props){
+    
+//     // let songs = data.filter((el) => el.kind === 'song')
+//     const display = props.data.map((item, index) => {
+//         return (
+//             <GalleryItem item={item} key={index} />
+//         )
+//     })
     
 //     return (
 //         <div>
-//             {songs.map((el) => {
-//                 return <GalleryItem track={el} key={el.trackId}/>
-//             })}
+//             {display}
 //         </div>
 //     )
 // }
+
+// export default Gallery
