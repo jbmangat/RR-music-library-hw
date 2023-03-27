@@ -1,59 +1,45 @@
 import './App.css';
-import React, {useEffect, useState, useRef} from 'react'
-import Searchbar from './components/SearchBar';
-import Gallery from './components/Gallery.js';
-// import { DataContext } from './context/DataContext.js'
-// import { SearchContext } from './context/SearchContext';
+import { useState, Suspense, useEffect } from 'react'
+import Gallery from './components/Gallery.js'
+import SearchBar from './components/SearchBar.js'
+import Spinner from './Spinner.js'
+import { createResource as fetchData } from './helper'
 
 function App() {
-  let [search, setSearch] = useState('')
-  let [data, setData] = useState([]);
-  let [message, setMessage] = useState('Search for music!');
-  // let searchInput = useRef('');
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      document.title = `${search} Music`
-      const response = await fetch('https://itunes.apple.com/search?term=the%20grateful%20dead')
-      const resData = await response.json()
-      if (resData.results.length > 0){
-        setData(resData.results)
-      } else{
-        setMessage('Not found')
-      }
-    }
-    fetchData()
-  }, [search]) 
+  let [searchTerm, setSearchTerm] = useState('')
+  let [message, setMessage] = useState('Search for Music!')
+  let [data, setData] = useState(null)
 
-  // const handleSubmit = (e, term) => {
-  //   e.preventDefault()
-  //   const fetchData = () => {
-  //     document.title = `${term} Music`
-  //     fetch(`https://itunes.apple.com/search?term=${term}`)
-  //       .then(response => response.json())
-  //       .then(result => {
-  //         setData(result.results) 
-  //       })
-  //   }
-      
-  //     fetchData()
-  // }
+  useEffect(() => {
+    if (searchTerm) {
+      document.title=`${searchTerm} Music`
+      console.log(fetchData(searchTerm))
+      setData(fetchData(searchTerm))
+  }
+  }, [searchTerm])
+
+  const handleSearch = (e, term) => {
+    e.preventDefault()
+    setSearchTerm(term)
+  }
+
+  const renderGallery = () => {
+    if(data){
+      return (
+        <Suspense fallback={<Spinner />}>
+          <Gallery data={data} />
+        </Suspense>
+      )
+    }
+  }
 
   return (
-    <>
-      {/* <SearchContext.Provider value={{ref: searchInput, handleSubmit}}> */}
-        <Searchbar  />
-      {/* </SearchContext.Provider> */}
+    <div className="App">
+      <SearchBar handleSearch={handleSearch} />
       {message}
-      {/* <DataContext.Provider value={data}> */}
-        <Gallery  />
-      {/* </DataContext.Provider> */}
-      
-      
-    </>
+      {renderGallery()}
+    </div>
   );
 }
 
 export default App;
-
-// https://itunes.apple.com/search?term=the%20grateful%20dead
