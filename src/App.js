@@ -1,60 +1,60 @@
-import './App.css';
-import { useState, Suspense, useEffect } from 'react'
-import Gallery from './components/Gallery.js'
-import SearchBar from './components/SearchBar.js'
-import Spinner from './Spinner.js'
-import { createResource as fetchData } from './helper'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import AlbumView from './components/AlbumView'
-import ArtistView from './components/ArtistView'
-import { Fragment } from 'react'
+import "./App.css";
+import { useState, Suspense, useEffect } from "react";
+import Gallery from "./components/Gallery.js";
+import SearchBar from "./components/SearchBar.js";
+import Spinner from "./Spinner.js";
+import { createResource as fetchData } from "./helper";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AlbumView from "./components/AlbumView";
+import ArtistView from "./components/ArtistView";
+import { Fragment } from "react";
 
 function App() {
-  let [searchTerm, setSearchTerm] = useState('')
-  let [message, setMessage] = useState('Search for Music!')
-  let [data, setData] = useState(null)
+  let [searchTerm, setSearchTerm] = useState("");
+  let [message, setMessage] = useState("Search for Music!");
+  let [data, setData] = useState(null);
 
   useEffect(() => {
     if (searchTerm) {
-      document.title=`${searchTerm} Music`
-      console.log(fetchData(searchTerm))
-      setData(fetchData(searchTerm))
-  }
-  }, [searchTerm])
+      document.title = `${searchTerm} Music`;
+      console.log(fetchData(searchTerm));
+      setData(fetchData(searchTerm));
+    }
+  }, [searchTerm]);
 
   const handleSearch = (e, term) => {
-    e.preventDefault()
-    setSearchTerm(term)
-  }
+    e.preventDefault();
+    setSearchTerm(term);
+  };
 
   const renderGallery = () => {
-    if(data){
+    if (data) {
       return (
         <Suspense fallback={<Spinner />}>
           <Gallery data={data} />
         </Suspense>
-      )
+      );
     }
-  }
+  };
 
   return (
     <div className="App">
-      <div className='App'>
-			{message}
-			<Router>
-				<Routes>
-					<Route path="/" element={
-						<Fragment>
-							<SearchBar handleSearch={handleSearch} />
-							{message}
-							{renderGallery()}
-						</Fragment>
-					} />
-					<Route path="/album/:id" element={<AlbumView />} />
-					<Route path="/artist/:id" element={<ArtistView />} />
-				</Routes>
-			</Router>
-		</div>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Fragment>
+                <SearchBar handleSearch={handleSearch} />
+                {message}
+                {renderGallery()}
+              </Fragment>
+            }
+          />
+          <Route path="/album/:id" element={<AlbumView />} />
+          <Route path="/artist/:id" element={<ArtistView />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
@@ -109,7 +109,7 @@ export default App;
 //           }/>
 //           <Route path='/album/:id' element={<AlbumView />} />
 //           <Route path='/artist/:id' element={<ArtistView />} />
-//         </Routes>  
+//         </Routes>
 //       </BrowserRouter>
 //     </div>
 //   );
