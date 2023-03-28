@@ -8,7 +8,6 @@ function Gallery(props){
             <GalleryItem item={item} key={index} />
         )
     })
-    
     return (
         <div>
             {display}
@@ -18,5 +17,5 @@ function Gallery(props){
 
 export default Gallery
 
-
+// import GalleryItem from "./GalleryItem.js"
 
